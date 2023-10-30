@@ -129,7 +129,7 @@ class CheXpertModule(pl.LightningModule):
             plt.ylabel("True Positive Rate")
             plt.title(f"{self.tasks[i]} ROC Curve")
             plt.legend(loc="lower right")
-            plt.savefig(f"{self.tasks[i]} ROC Curve.png")
+            plt.savefig(f"./Results/{self.tasks[i]} ROC Curve.png")
 
         self.val_output = None
         self.val_labels = None
