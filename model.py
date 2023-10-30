@@ -127,7 +127,7 @@ class CheXpertModule(pl.LightningModule):
             plt.plot([0, 1], [0, 1])
             plt.xlabel("False Positive Rate")
             plt.ylabel("True Positive Rate")
-            plt.title(f"{[self.tasks[i]]} ROC Curve")
+            plt.title(f"{self.tasks[i]} ROC Curve")
             plt.legend(loc="lower right")
             plt.savefig(f"{self.tasks[i]} ROC Curve.png")
 
