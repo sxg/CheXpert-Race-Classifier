@@ -1,3 +1,4 @@
+import torch
 import lightning.pytorch as pl
 import torch.utils.data as data
 import torchvision.transforms as T
@@ -23,6 +24,8 @@ class CheXpertDataModule(pl.LightningDataModule):
                 T.Resize((320, 320), antialias=True),
                 T.RandomRotation(15),
                 T.RandomResizedCrop((290, 290), (0.8, 1.2), antialias=True),
+                # T.Lambda(CheXpertDataModule._sort_values),
+                # T.Lambda(CheXpertDataModule._round_values),
             ]
         )
         self.train_target_transform = None
@@ -31,8 +34,8 @@ class CheXpertDataModule(pl.LightningDataModule):
                 T.ToTensor(),
                 T.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
                 T.Resize((320, 320), antialias=True),
-                T.RandomRotation(15),
-                T.RandomResizedCrop((290, 290), (0.8, 1.2), antialias=True),
+                # T.Lambda(CheXpertDataModule._sort_values),
+                # T.Lambda(CheXpertDataModule._round_values),
             ]
         )
         self.val_target_transform = None
@@ -67,3 +70,10 @@ class CheXpertDataModule(pl.LightningDataModule):
             num_workers=10,
             shuffle=False,
         )
+
+    def _sort_values(tensor):
+        sorted_tensor, _ = tensor.sort()
+        return sorted_tensor
+
+    def _round_values(tensor):
+        return torch.round(tensor / 0.05) * 0.05

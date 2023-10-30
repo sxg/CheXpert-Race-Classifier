@@ -6,7 +6,7 @@ model:
     - "Black"
     - "Asian"
   criterion:
-    class_path: torch.nn.BCELoss
+    class_path: torch.nn.CrossEntropyLoss
 optimizer:
   class_path: torch.optim.Adam
   init_args:
