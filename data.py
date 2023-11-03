@@ -6,15 +6,17 @@ from dataset import CheXpertDataset
 
 
 class CheXpertDataModule(pl.LightningDataModule):
-    def __init__(self, tasks, data_path, batch_size=64):
+    def __init__(
+        self, tasks, data_path, train_df_path, val_df_path, batch_size=64
+    ):
         super().__init__()
         self.batch_size = batch_size
         self.data_path = data_path
         self.tasks = tasks
 
         # Create the DataFrame paths
-        self.train_df_path = "train_demo.csv"
-        self.val_df_path = "valid_demo.csv"
+        self.train_df_path = train_df_path
+        self.val_df_path = val_df_path
 
         # Setup the transforms
         self.train_transform = T.Compose(
