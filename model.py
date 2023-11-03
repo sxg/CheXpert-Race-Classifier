@@ -3,7 +3,7 @@ from torch import nn
 import lightning.pytorch as pl
 from torchvision import models
 from torchvision.utils import make_grid
-from torchmetrics import Accuracy, AUROC, ROC
+from torchmetrics import Accuracy, AUROC, ROC, Recall, Precision, F1Score
 import matplotlib.pyplot as plt
 
 
@@ -25,6 +25,15 @@ class CheXpertModule(pl.LightningModule):
             task="multiclass", num_classes=len(self.tasks), average=None
         )
         self.auroc_fn = AUROC(
+            task="multiclass", num_classes=len(self.tasks), average=None
+        )
+        self.recall_fn = Recall(
+            task="multiclass", num_classes=len(self.tasks), average=None
+        )
+        self.precision_fn = Precision(
+            task="multiclass", num_classes=len(self.tasks), average=None
+        )
+        self.f1score_fn = F1Score(
             task="multiclass", num_classes=len(self.tasks), average=None
         )
         self.val_output = None
@@ -85,9 +94,15 @@ class CheXpertModule(pl.LightningModule):
         # Calculate metrics for each task
         acc = self.accuracy_fn(output, labels_red)
         auroc = self.auroc_fn(output, labels_red.int())
+        recall = self.recall_fn(output, labels_red.int())
+        precision = self.precision_fn(output, labels_red.int())
+        f1score = self.f1score_fn(output, labels_red.int())
         for i, task in enumerate(self.tasks):
             self.log(f"val/acc_{task}", acc[i])
             self.log(f"val/auroc_{task}", auroc[i])
+            self.log(f"val/recall_{task}", recall[i])
+            self.log(f"val/precision_{task}", precision[i])
+            self.log(f"val/f1score_{task}", f1score[i])
 
         # Log sample data to TensorBoard
         if not self.val_logged_images:
