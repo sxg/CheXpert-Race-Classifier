@@ -145,6 +145,7 @@ class CheXpertModule(pl.LightningModule):
             plt.title(f"{self.tasks[i]} ROC Curve")
             plt.legend(loc="lower right")
             plt.savefig(f"./Results/{self.tasks[i]} ROC Curve.png")
+            plt.close()
 
         self.val_output = None
         self.val_labels = None
